@@ -10,6 +10,7 @@ const AddMeal = () => {
   const mealTime = [
     {title: 'Breakfast', id: 'breakfast'},
     {title: 'Lunch', id: 'lunch'},
+    {title: 'Snack', id: 'snack'},
     {title: 'Dinner', id: 'dinner'},
   ];
 

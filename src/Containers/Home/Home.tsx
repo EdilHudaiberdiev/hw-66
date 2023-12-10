@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import axiosApi from '../../axiosApi';
 import Spinner from '../../Components/UI/Spinner/Spinner';
+import MealItem from '../../Components/MealItem/MealItem';
 
 export interface IMeals {
   id: string,
@@ -50,6 +51,17 @@ const Home = () => {
 
   }, []);
 
+  const deleteMeal = async (id: string) => {
+    setLoading(true);
+    try {
+      await axiosApi.delete(`/meal/${id}.json`);
+      fetchData('/meal.json').catch(e => console.error(e));
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
+  };
+
   return (
 
     <div>
@@ -60,15 +72,8 @@ const Home = () => {
           {meal.length > 0 ?
             <>
               {meal.map(mealItem => (
-                <div key={mealItem.id} className="border mb-2 bg-light">
-                  <p><b>{mealItem.text}</b></p>
-                  <p>{mealItem.calories} colories
-                    {parseInt(mealItem.calories) > 150 ? <i> - to mach! :(</i>
-                      :  <i> - good choice :)</i>
-                    }
-                  </p>
-                  <p>{mealItem.mealTime}</p>
-                </div>
+                <MealItem id={mealItem.id} key={mealItem.id} text={mealItem.text} calories={mealItem.calories}
+                          mealTime={mealItem.mealTime} deleteMeal={deleteMeal} />
               ))}
             </>
             :
