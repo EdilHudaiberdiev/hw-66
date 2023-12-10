@@ -2,80 +2,55 @@ import {useNavigate} from 'react-router-dom';
 import React, {useState} from 'react';
 import IMeal from '../../types.d.';
 import axiosApi from '../../axiosApi';
-
+import SendForm from '../../Components/SendForm/SendForm';
+import Spinner from '../../Components/UI/Spinner/Spinner';
 
 const AddMeal = () => {
-  const Navigation = useNavigate();
 
-  const mealTime = [
-    {title: 'Breakfast', id: 'breakfast'},
-    {title: 'Lunch', id: 'lunch'},
-    {title: 'Snack', id: 'snack'},
-    {title: 'Dinner', id: 'dinner'},
-  ];
+      const Navigation = useNavigate();
 
-  const [meal, setMeal] = useState<IMeal>({
-    text: '',
-    mealTime: '',
-    calories: '',
-  });
+      const [meal, setMeal] = useState<IMeal>({
+        text: '',
+        mealTime: 'breakfast',
+        calories: '',
+      });
 
-  const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setMeal((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+      const [loading, setLoading] = useState(false);
 
-  const onFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+      const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setMeal((prev) => ({
+          ...prev,
+          [e.target.name]: e.target.value,
+        }));
+      };
 
-    try {
-      await axiosApi.post('meal.json', meal);
-    } finally {
-      Navigation('/');
-    }
-  };
+      const onFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+
+        if (meal.text && meal.calories !== '') {
+          setLoading(true);
+          try {
+            await axiosApi.post('meal.json', meal);
+          } finally {
+            setLoading(false);
+            Navigation('/');
+          }
+        } else {
+          alert('add meal and calories');
+        }
+      };
 
   return (
-    <>
-      <form onSubmit={onFormSubmit}>
-        <h2 className="text-center mb-4">Add meal</h2>
-        <div className="mb-3 w-75 mx-auto">
-          <label htmlFor="text" className="form-label">Meal</label>
-          <input
-            type="text"
-            name="text"
-            id="text"
-            className="form-control"
-            value={meal.text}
-            onChange={changeForm}
-          />
-        </div>
-
-        <div className="mb-3 w-75 mx-auto">
-          <label htmlFor="text" className="form-label">Calories</label>
-          <input
-            type="calories"
-            name="calories"
-            id="calories"
-            className="form-control"
-            value={meal.calories}
-            onChange={changeForm}
-          />
-        </div>
-
-        <select name="mealTime" onChange={changeForm}>
-          {mealTime.map(mealTime => (
-            <option key={mealTime.id} value={mealTime.id}>{mealTime.title}</option>
-          ))}
-        </select>
-
-        <div className="text-center mt-3">
-          <button type="submit" className="btn btn-primary">Send</button>
-        </div>
-      </form>
-    </>
+      <>
+          {loading ? <Spinner/>  :
+            <SendForm
+              meal={meal}
+              changeForm={e => changeForm(e)}
+              onFormSubmit={e => onFormSubmit(e)}
+            />
+          }
+      </>
   );
 };
 

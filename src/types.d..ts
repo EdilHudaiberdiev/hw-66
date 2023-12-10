@@ -5,6 +5,4 @@ interface IMeal {
   calories: string,
 }
 
-
-
 export default IMeal;

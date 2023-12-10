@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 
 export interface Props {
   id: string,
@@ -9,6 +10,7 @@ export interface Props {
 }
 
 const MealItem: React.FC<Props> = ({id, text, mealTime, calories, deleteMeal}) => {
+  const Navigation = useNavigate();
   return (
       <div key={id} className="border mb-2 bg-light">
         <p><b>{text}</b></p>
@@ -19,6 +21,7 @@ const MealItem: React.FC<Props> = ({id, text, mealTime, calories, deleteMeal}) =
         </p>
         <p>{mealTime}</p>
         <button className="btn btn-danger me-3 mb-2" type="button" onClick={() => deleteMeal(id)}>Delete</button>
+        <button className="btn btn-info me-3 mb-2" type="button" onClick={() => Navigation(`/meal/${id}/edit-meal`)}>Edit</button>
       </div>
   );
 };
