@@ -1,5 +1,5 @@
 import {useNavigate} from 'react-router-dom';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import IMeal from '../../types.d.';
 import axiosApi from '../../axiosApi';
 
@@ -36,7 +36,6 @@ const AddMeal = () => {
     }
   };
 
-
   return (
     <>
       <form onSubmit={onFormSubmit}>
@@ -54,7 +53,7 @@ const AddMeal = () => {
         </div>
 
         <div className="mb-3 w-75 mx-auto">
-          <label htmlFor="text" className="form-label">Colories</label>
+          <label htmlFor="text" className="form-label">Calories</label>
           <input
             type="calories"
             name="calories"
